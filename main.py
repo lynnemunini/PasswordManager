@@ -1,16 +1,17 @@
 from tkinter import *
 import random
-import pyperclip
+# import pyperclip
 window = Tk()
 GREY = "#F3EFCC"
-# window.option_add('*Dialog.msg.font', 'courier 12')
-# window['bg'] = GREY
-
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
-#Password Generator Project
+# Password Generator Project
+
+
 def generate_password():
-    letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+    letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
+               's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
+               'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
     numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
     symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
 
@@ -25,12 +26,14 @@ def generate_password():
 
     random.shuffle(password_list)
 
-    my_password = "".join(password_list)
-    password.insert(INSERT, my_password)
+    new_password = "".join(password_list)
+    password.insert(INSERT, new_password)
     # Copy password generated to clipboard
     # pyperclip.copy(my_password)
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
+
+
 def choice(option):
     pop.destroy()
     if option == yes_image:
@@ -67,12 +70,11 @@ def clicker():
         ok_image_button = Button(my_frame, image=ok_image, bg=GREY, highlightthickness=0,
                                  command=lambda: choice(ok_image), border=0)
         ok_image_button.grid(row=1, column=2)
-        # ok = Button(my_frame, text="OK", command=lambda: choice("ok"), bg="orange")
-        # ok.grid(row=3, column=2)
+
     else:
         global pict
         pop.geometry("350x150")
-        pop.title(f"{my_username_email}")
+        pop.title(f"{my_website}")
         my_text = f"\nThese are the details you entered\n" \
                   f"Email: {my_username_email}\n" \
                   f"Password: {my_password}\n" \
@@ -85,41 +87,11 @@ def clicker():
         yes_image_button = Button(my_frame, image=yes_image, bg=GREY, highlightthickness=0,
                                   command=lambda: choice(yes_image), border=0)
         yes_image_button.grid(row=3, column=1, padx=50)
-        # yes = Button(my_frame, text="Yes", command=lambda: choice("yes"), bg="orange", borderwidth=0, highlightthickness=0)
-        # yes.grid(row=3, column=1, padx=50)
         no_image = PhotoImage(file="say-no (1).png")
         no_image_button = Button(my_frame, image=no_image, bg=GREY, highlightthickness=0,
                                  command=lambda: choice(no_image), border=0)
         no_image_button.grid(row=3, column=2, padx=50)
 
-        # no = Button(my_frame, text="No", command=lambda: choice("no"), bg="orange", borderwidth=0, highlightthickness=0)
-        # no.grid(row=3, column=2, padx=50)
-
-
-# my_label = Label(window, text="")
-# my_label.pack(pady=20)
-
-
-# def save():
-#     my_website = website.get("1.0", 'end-1c')
-#     my_username_email = email.get("1.0", 'end-1c')
-#     my_password = password.get("1.0", 'end-1c')
-#
-#     if len(my_website) == 0 or len(my_password) == 0:
-#         messagebox.showinfo(title="Oops!", message="Please make sure you haven't left any fields empty")
-#     else:
-#         is_ok = messagebox.askokcancel(title=my_website, message=f"These are the details entered \n"
-#                                                                  f"Email: {my_username_email}\n"
-#                                                                  f"Password: {my_password}\nis it okay to save?")
-#         if is_ok:
-#             my_new_password = f"{my_website} | {my_username_email} | {my_password} | \n"
-#             with open(f"data.txt", mode="a") as data:
-#                 data.write(my_new_password)
-#
-            # website.delete('1.0', END)
-            # email.delete('1.0', END)
-            # password.delete('1.0', END)
-            # website.focus()
 
 # ---------------------------- UI SETUP ------------------------------- #
 window.title("Password Manager")
@@ -165,7 +137,8 @@ password = Text(bg="white", borderwidth=0, highlightthickness=0, width=31, heigh
 password.grid(column=1, row=3, pady=5)
 
 # Password Generate
-generate = Button(text="Generate", font=("courier", 13), width=9, borderwidth=0, highlightthickness=0, command=generate_password)
+generate = Button(text="Generate", font=("courier", 13), width=9, borderwidth=0, highlightthickness=0,
+                  command=generate_password)
 generate.grid(column=2, padx=0, row=3)
 generate.config(bg="orange")
 
