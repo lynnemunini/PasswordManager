@@ -121,6 +121,7 @@ def clicker():
 def ok():
     pop.destroy()
 
+
 def okay():
     pop_up.destroy()
 
@@ -130,34 +131,65 @@ def find_password():
     pop_up = Toplevel(window)
     pop_up.config(bg=GREY)
     global ok1_image
-    with open("data.json", mode="r") as data_file:
-        my_website = website.get("1.0", 'end-1c')
-        try:
+    global warning_image
+    my_website = website.get("1.0", 'end-1c')
+    try:
+        with open("data.json", mode="r") as data_file:
             # Reading old data
             data = json.load(data_file)
             exist_password = data[my_website]["password"]
-        except KeyError:
-            pop_up.geometry("300x100")
-            pop_up.title("Oops!")
-            pop_label = Label(pop_up, text="No data found!", bg=GREY,
-                              font=("courier", 12, "normal"))
-            pop_label.grid(row=0, column=1, padx=60, pady=10)
-            my_frame = Frame(pop_up, bg=GREY)
-            my_frame.grid(row=1, column=1, pady=5)
-            ok1_image = PhotoImage(file="ok (1).png")
-            ok1_image_button = Button(my_frame, image=ok1_image, bg=GREY, highlightthickness=0, command=okay, border=0)
-            ok1_image_button.grid(row=1, column=3)
-        else:
-            pop_up.geometry("400x100")
-            pop_up.title(my_website)
-            pop_label = Label(pop_up, text=f"{my_website}'s password is {exist_password}", bg=GREY,
-                              font=("courier", 12, "normal"))
-            pop_label.grid(row=0, column=1, padx=20, pady=10)
-            my_frame = Frame(pop_up, bg=GREY)
-            my_frame.grid(row=1, column=1, pady=5)
-            ok1_image = PhotoImage(file="okay.png")
-            ok1_image_button = Button(my_frame, image=ok1_image, bg=GREY, highlightthickness=0, command=okay, border=0)
-            ok1_image_button.grid(row=1, column=3)
+            exist_email = data[my_website]["email"]
+    except FileNotFoundError:
+        pop_up.geometry("270x180")
+        pop_up.title("Oops!")
+        # WARNING SECTION
+        my_frame = Frame(pop_up, bg=GREY)
+        my_frame.grid(row=0, column=1, pady=5)
+        warning_image = PhotoImage(file="warning.png")
+        warning_label = Label(my_frame, image=warning_image, bg=GREY, highlightthickness=0, border=0)
+        warning_label.grid(row=0, column=3)
+        # TEXTS
+        pop_label = Label(pop_up, text="No data file found!", bg=GREY,
+                          font=("courier", 12, "normal"))
+        pop_label.grid(row=2, column=1, padx=35, pady=30)
+        # OK IMAGE SECTION
+        my_new_frame = Frame(pop_up, bg=GREY)
+        my_new_frame.grid(row=3, column=1, pady=5)
+        ok1_image = PhotoImage(file="ok (1).png")
+        ok1_image_button = Button(my_new_frame, image=ok1_image, bg=GREY, highlightthickness=0, command=okay, border=0)
+        ok1_image_button.grid(row=1, column=3)
+
+    except KeyError:
+        pop_up.geometry("400x180")
+        pop_up.title("Oops!")
+        # WARNING SECTION
+        my_frame = Frame(pop_up, bg=GREY)
+        my_frame.grid(row=0, column=1, pady=5)
+        warning_image = PhotoImage(file="warning.png")
+        warning_label = Label(my_frame, image=warning_image, bg=GREY, highlightthickness=0, border=0)
+        warning_label.grid(row=0, column=3)
+        # TEXTS
+        pop_label = Label(pop_up, text="No details for the website exists!", bg=GREY,
+                          font=("courier", 12, "normal"))
+        pop_label.grid(row=2, column=1, padx=30, pady=30)
+        # OK IMAGE SECTION
+        my_new_frame = Frame(pop_up, bg=GREY)
+        my_new_frame.grid(row=3, column=1, pady=5)
+        ok1_image = PhotoImage(file="ok (1).png")
+        ok1_image_button = Button(my_new_frame, image=ok1_image, bg=GREY, highlightthickness=0, command=okay, border=0)
+        ok1_image_button.grid(row=1, column=3)
+    else:
+        pop_up.geometry("450x120")
+        pop_up.title(my_website)
+        pop_label = Label(pop_up, text=f"{my_website}'s username/email is {exist_email} \n password is"
+                                       f" {exist_password}", bg=GREY,
+                          font=("courier", 12, "normal"))
+        pop_label.grid(row=0, column=1, padx=20, pady=10)
+        my_frame = Frame(pop_up, bg=GREY)
+        my_frame.grid(row=1, column=1, pady=5)
+        ok1_image = PhotoImage(file="okay.png")
+        ok1_image_button = Button(my_frame, image=ok1_image, bg=GREY, highlightthickness=0, command=okay, border=0)
+        ok1_image_button.grid(row=1, column=3)
 
 
 window.title("Password Manager")
