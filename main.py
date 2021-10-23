@@ -45,14 +45,27 @@ def choice(option):
                 "password": my_password
             }
         }
-        with open("data.json", mode="w") as data_file:
-            json.dump(new_data, data_file)
-        website.delete('1.0', END)
-        email.delete('1.0', END)
-        password.delete('1.0', END)
-        website.focus()
-    else:
-        pass
+        try:
+            with open("data.json", mode="r") as data_file:
+                # json.dump(new_data, data_file, indent=4)
+                # Reading old data
+                data = json.load(data_file)
+        except FileNotFoundError:
+            with open("data.json", mode="w") as data_file:
+                # Saving the updated data
+                json.dump(new_data, data_file, indent=4)
+        # Run if no issues
+        else:
+            # Updating old data
+            data.update(new_data)
+            with open("data.json", mode="w") as data_file:
+                # Saving the updated data
+                json.dump(data, data_file, indent=4)
+        finally:
+            website.delete('1.0', END)
+            email.delete('1.0', END)
+            password.delete('1.0', END)
+            website.focus()
 
 
 def clicker():
@@ -97,6 +110,7 @@ def clicker():
         yes_image_button = Button(my_frame, image=yes_image, bg=GREY, highlightthickness=0,
                                   command=lambda: choice(yes_image), border=0)
         yes_image_button.grid(row=3, column=1, padx=50)
+        global no_image
         no_image = PhotoImage(file="say-no (1).png")
         no_image_button = Button(my_frame, image=no_image, bg=GREY, highlightthickness=0,
                                  command=lambda: choice(no_image), border=0)
@@ -106,6 +120,44 @@ def clicker():
 # ---------------------------- UI SETUP ------------------------------- #
 def ok():
     pop.destroy()
+
+def okay():
+    pop_up.destroy()
+
+
+def find_password():
+    global pop_up
+    pop_up = Toplevel(window)
+    pop_up.config(bg=GREY)
+    global ok1_image
+    with open("data.json", mode="r") as data_file:
+        my_website = website.get("1.0", 'end-1c')
+        try:
+            # Reading old data
+            data = json.load(data_file)
+            exist_password = data[my_website]["password"]
+        except KeyError:
+            pop_up.geometry("300x100")
+            pop_up.title("Oops!")
+            pop_label = Label(pop_up, text="No data found!", bg=GREY,
+                              font=("courier", 12, "normal"))
+            pop_label.grid(row=0, column=1, padx=60, pady=10)
+            my_frame = Frame(pop_up, bg=GREY)
+            my_frame.grid(row=1, column=1, pady=5)
+            ok1_image = PhotoImage(file="ok (1).png")
+            ok1_image_button = Button(my_frame, image=ok1_image, bg=GREY, highlightthickness=0, command=okay, border=0)
+            ok1_image_button.grid(row=1, column=3)
+        else:
+            pop_up.geometry("400x100")
+            pop_up.title(my_website)
+            pop_label = Label(pop_up, text=f"{my_website}'s password is {exist_password}", bg=GREY,
+                              font=("courier", 12, "normal"))
+            pop_label.grid(row=0, column=1, padx=20, pady=10)
+            my_frame = Frame(pop_up, bg=GREY)
+            my_frame.grid(row=1, column=1, pady=5)
+            ok1_image = PhotoImage(file="okay.png")
+            ok1_image_button = Button(my_frame, image=ok1_image, bg=GREY, highlightthickness=0, command=okay, border=0)
+            ok1_image_button.grid(row=1, column=3)
 
 
 window.title("Password Manager")
@@ -138,6 +190,11 @@ website = Text(borderwidth=0, highlightthickness=0, width=45, height=2, insertba
 website.focus()
 website.grid(column=1, row=1, columnspan=2, pady=5)
 
+# search
+search_image = PhotoImage(file="search.png")
+search_image_button = Button(image=search_image, bg=GREY, highlightthickness=0, border=0, command=find_password)
+search_image_button.grid(column=3, row=1, padx=0)
+
 # Email Text
 email = Text(borderwidth=0, insertbackground="orange", highlightthickness=0, width=45, height=2,
              selectbackground="white", fg="orange", cursor="pencil")
@@ -156,11 +213,11 @@ generate = Button(text="Generate", font=("courier", 13), width=9, borderwidth=0,
 generate.grid(column=2, padx=0, row=3)
 generate.config(bg="orange")
 
-# Generate image
-generate = Canvas(width=32, height=32, bg=GREY, highlightthickness=0)
-create = PhotoImage(file="creating.png")
-generate.create_image(16, 16, image=create)
-generate.grid(column=3, row=3)
+# # Generate image
+# generate = Canvas(width=32, height=32, bg=GREY, highlightthickness=0)
+# create = PhotoImage(file="creating.png")
+# generate.create_image(16, 16, image=create)
+# generate.grid(column=3, row=3)
 # Add
 add_image = PhotoImage(file="plus-sign.png")
 add_image_button = Button(image=add_image, bg=GREY, highlightthickness=0, border=0, command=clicker)
