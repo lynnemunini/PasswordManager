@@ -1,9 +1,9 @@
 from tkinter import *
 import random
+import json
 # import pyperclip
 window = Tk()
 GREY = "#F3EFCC"
-
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 # Password Generator Project
 
@@ -36,19 +36,27 @@ def generate_password():
 
 def choice(option):
     pop.destroy()
+
     if option == yes_image:
-        my_new_password = f"{my_website} | {my_username_email} | {my_password} | \n"
-        with open(f"data.txt", mode="a") as data:
-            data.write(my_new_password)
+        # my_new_password = f"{my_website} | {my_username_email} | {my_password} | \n"
+        new_data = {
+            my_website: {
+                "email": my_username_email,
+                "password": my_password
+            }
+        }
+        with open("data.json", mode="w") as data_file:
+            json.dump(new_data, data_file)
         website.delete('1.0', END)
         email.delete('1.0', END)
         password.delete('1.0', END)
         website.focus()
+    else:
+        pass
 
 
 def clicker():
     global pop
-    global yes_image
     pop = Toplevel(window)
     global my_website
     my_website = website.get("1.0", 'end-1c')
@@ -66,9 +74,10 @@ def clicker():
         pop_label.grid(row=0, column=1, pady=10)
         my_frame = Frame(pop, bg=GREY)
         my_frame.grid(row=1, column=1, pady=5)
+        global ok_image
         ok_image = PhotoImage(file="ok (1).png")
         ok_image_button = Button(my_frame, image=ok_image, bg=GREY, highlightthickness=0,
-                                 command=lambda: choice(ok_image), border=0)
+                                 command=ok, border=0)
         ok_image_button.grid(row=1, column=2)
 
     else:
@@ -83,6 +92,7 @@ def clicker():
         pop_label.grid(row=0, column=1)
         my_frame = Frame(pop, bg=GREY)
         my_frame.grid(row=1, column=1, pady=5)
+        global yes_image
         yes_image = PhotoImage(file="yes (1).png")
         yes_image_button = Button(my_frame, image=yes_image, bg=GREY, highlightthickness=0,
                                   command=lambda: choice(yes_image), border=0)
@@ -94,6 +104,10 @@ def clicker():
 
 
 # ---------------------------- UI SETUP ------------------------------- #
+def ok():
+    pop.destroy()
+
+
 window.title("Password Manager")
 window.config(padx=20, pady=20, bg=GREY)
 canvas = Canvas(width=256, height=256, bg=GREY, highlightthickness=0)
